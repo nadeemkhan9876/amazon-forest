@@ -1,7 +1,7 @@
 # ==================== ECR (private Docker image registry) ====================
 resource "aws_ecr_repository" "app" {
   name                 = "learningsteps-api"
-  image_tag_mutability = "MUTABLE" # lets us re-push the tag "latest"
+  image_tag_mutability = "IMMUTABLE" # lets us re-push the tag "unlatest"
   force_delete         = true      # lets `terraform destroy` delete the repo even if it holds images
 
   image_scanning_configuration {
