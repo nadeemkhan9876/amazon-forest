@@ -41,7 +41,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Build the Docker image
-        run: docker build -t learningsteps-api:ci ____
+        run: docker build -t learningsteps-api:ci app
 
       - name: Scan the image for vulnerable packages
         uses: aquasecurity/trivy-action@v0.35.0
