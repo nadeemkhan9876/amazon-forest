@@ -18,3 +18,15 @@ jobs:
         uses: gitleaks/gitleaks-action@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  terraform-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get the code
+        uses: actions/checkout@v4
+
+      - name: Scan Terraform for insecure settings
+        uses: bridgecrewio/checkov-action@v12
+        with:
+          directory: .tf          # BLANK 1
+          framework: checkov     # BLANK 2
