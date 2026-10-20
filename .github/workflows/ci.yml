@@ -30,6 +30,6 @@ jobs:
         with:
           scan-type: config
           scan-ref: infra-terraform            # BLANK 1
-          severity: high ,critical           # BLANK 2
+          severity: "HIGH,CRITICAL"           # BLANK 2
           exit-code: '1'         # BLANK 3
           format: table
