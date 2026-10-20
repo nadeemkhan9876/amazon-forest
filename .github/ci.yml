@@ -1,0 +1,20 @@
+name: CI security checks
+
+on:
+  push:
+    branches: [main]          # BLANK 1
+  pull_request:
+
+jobs:
+  secret-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get the code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0     # BLANK 2
+
+      - name: Scan for secrets
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
