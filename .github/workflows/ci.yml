@@ -33,3 +33,21 @@ jobs:
           severity: "HIGH,CRITICAL"           # BLANK 2
           exit-code: '1'         # BLANK 3
           format: table
+
+  image-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get the code
+        uses: actions/checkout@v4
+
+      - name: Build the Docker image
+        run: docker build -t learningsteps-api:ci ____
+
+      - name: Scan the image for vulnerable packages
+        uses: aquasecurity/trivy-action@v0.35.0
+        with:
+          scan-type: image
+          image-ref: learningsteps-api:ci
+          severity: "HIGH,CRITICAL"
+          exit-code: '1'
+          format: table
