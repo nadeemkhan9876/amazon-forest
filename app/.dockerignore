@@ -1,0 +1,9 @@
+.git
+.env
+.vscode
+.devcontainer
+venv
+__pycache__
+README.md
+requirements.original.txt
+.venv

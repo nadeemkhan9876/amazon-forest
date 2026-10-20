@@ -1,0 +1,38 @@
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+tfplan
+terraform.tfvars
+*.csv
+.env
+Keys_password.txt
+crash.log
+
+# Secrets and credentials
+.env
+*.pem
+credentials*
+*.bak
+*.broken
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# Editor / OS
+.vscode/
+.DS_Store
+
+# Screenshots and reports (stay on my computer only)
+screenshots/
+*.docx
+*.pdf
+*.png
+
+.~lock.*
+message.txt
+cloud.md
+Amazon_New_Cheatsheet.md
+Amazon New Architecture.md

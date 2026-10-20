@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: learningsteps-api
+  labels:
+    app: learningsteps-api
+spec:
+  replicas: 2                         # hint: how many copies? we agreed on 2
+  selector:
+    matchLabels:
+      app: learningsteps-api
+  template:
+    metadata:
+      labels:
+        app: learningsteps-api
+    spec:
+      containers:
+        - name: api
+          image: 518285921450.dkr.ecr.eu-central-1.amazonaws.com/learningsteps-api:v1   # hint: the tag you pushed
+          ports:
+            - containerPort: 8000
+          envFrom:
+            - configMapRef:
+                name: learningsteps-config   # hint: the ConfigMap's name
+
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret             # hint: the Secret's name
+                  key: DATABASE_URL              # hint: the key inside it
+          readinessProbe:
+            httpGet:
+              path: /docs
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /docs
+              port: 8000
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 256Mi
