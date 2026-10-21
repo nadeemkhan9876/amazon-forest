@@ -69,6 +69,11 @@ jobs:
       - name: Get the code
         uses: actions/checkout@v4
 
+      - name: DEBUG - show what GitHub puts in the badge (temporary)
+        run: |
+          TOKEN=$(curl -s -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=sts.amazonaws.com" | jq -r '.value')
+          echo "$TOKEN" | jq -R 'split(".")[1] | gsub("-";"+") | gsub("_";"/") | @base64d | fromjson | {iss, aud, sub, repository, ref}'
+
       - name: Get temporary AWS keys (OIDC)
         uses: aws-actions/configure-aws-credentials@v4
         with:

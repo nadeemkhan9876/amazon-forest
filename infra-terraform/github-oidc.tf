@@ -3,9 +3,11 @@
 # Who am I? (gives us the account number without typing it)
 data "aws_caller_identity" "current" {}
 
-# The GitHub provider that ALREADY exists in the account. We only read it.
-data "aws_iam_openid_connect_provider" "github" {
-  url = "https://token.actions.githubusercontent.com"
+# The GitHub provider: "AWS trusts badges signed by GitHub". We create it ourselves.
+resource "aws_iam_openid_connect_provider" "github" {
+  url            = "https://token.actions.githubusercontent.com"
+  client_id_list = ["sts.amazonaws.com"] # hint: the audience GitHub puts on its badge. It is the same text as the "aud" condition in the role below
+  tags           = var.common_tags
 }
 
 # The role that GitHub pipeline runs will "put on"
@@ -17,7 +19,7 @@ resource "aws_iam_role" "github_actions" {
     Statement = [{
       Effect    = "Allow"
       Action    = "sts:AssumeRoleWithWebIdentity"
-      Principal = { Federated = data.aws_iam_openid_connect_provider.github.arn }
+      Principal = { Federated = aws_iam_openid_connect_provider.github.arn }
       Condition = {
         StringEquals = {
           "token.actions.githubusercontent.com:aud" = "sts.amazonaws.com"
