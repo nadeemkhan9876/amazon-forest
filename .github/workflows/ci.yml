@@ -57,3 +57,30 @@ jobs:
           exit-code: '1'
           format: table
           ignore-unfixed: true
+
+  push-to-ecr:
+    needs: [secret-scan, terraform-scan, image-scan]   # waits for all three guards to pass
+    if: github.event_name == 'push'                    # only for pushes to main, never for pull requests
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write    # lets this run ask GitHub for the signed "badge"
+      contents: read
+    steps:
+      - name: Get the code
+        uses: actions/checkout@v4
+
+      - name: Get temporary AWS keys (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::518285921450:role/amazon-new-github-actions-role    # hint 1: the role ARN from your Terraform output
+          aws-region: eu-central-1        # hint 2: our region
+
+      - name: Log in to ECR
+        id: ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build and push the image
+        run: |
+          IMAGE=${{ steps.ecr.outputs.registry }}/learningsteps-api:${{ github.sha }}
+          docker build -t $IMAGE app
+          docker push $IMAGE
