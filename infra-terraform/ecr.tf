@@ -2,7 +2,7 @@
 resource "aws_ecr_repository" "app" {
   name                 = "learningsteps-api"
   image_tag_mutability = "IMMUTABLE" # lets us re-push the tag "unlatest"
-  force_delete         = true      # lets `terraform destroy` delete the repo even if it holds images
+  force_delete         = true        # lets `terraform destroy` delete the repo even if it holds images
 
   image_scanning_configuration {
     scan_on_push = true # hint: true or false? We want AWS to scan every pushed image for vulnerabilities
