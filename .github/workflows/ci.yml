@@ -85,3 +85,32 @@ jobs:
           IMAGE=${{ steps.ecr.outputs.registry }}/learningsteps-api:${{ github.sha }}
           docker build -t $IMAGE app
           docker push $IMAGE
+
+  deploy-to-eks:
+    needs: [push-to-ecr]
+    if: github.event_name == 'push' && vars.DEPLOY_ENABLED == 'true'   # the on/off switch
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Get temporary AWS keys (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::518285921450:role/amazon-new-github-actions-role
+          aws-region: eu-central-1
+
+      - name: Connect kubectl to the cluster
+        run: aws eks update-kubeconfig --name amazon-new-cluster --region eu-central-1
+        # hint 1: the cluster name. In eks.tf: "${var.project_name}-cluster"
+
+      - name: Swap in the new image
+        run: |
+          IMAGE=518285921450.dkr.ecr.eu-central-1.amazonaws.com/learningsteps-api:${{ github.sha }}
+          kubectl set image deployment/learningsteps-api learningsteps-api api=$IMAGE
+        # hint 2: the same commit ID that push-to-ecr used as the tag
+        # hint 3: the Deployment's name (metadata: name: in deployment.yaml)
+        # hint 4: the CONTAINER's name inside it (the line "- name: ..." under containers:)
+
+      - name: Wait until the new pods are running
+        run: kubectl rollout status deployment/learningsteps-api --timeout=180s
