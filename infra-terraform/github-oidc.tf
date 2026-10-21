@@ -27,7 +27,7 @@ resource "aws_iam_role" "github_actions" {
         StringLike = {
           # hint 1: only runs from MY repository on the main branch may use this role
           # format: repo:<github-user>/<repo-name>:ref:refs/heads/main
-          "token.actions.githubusercontent.com:sub" = "repo:nadeemkhan9876/amazon-forest:ref:refs/heads/main"
+          "token.actions.githubusercontent.com:sub" = "repo:nadeemkhan9876@118846447/amazon-forest@1425999922:ref:refs/heads/main"
         }
       }
     }]
