@@ -107,7 +107,7 @@ jobs:
       - name: Swap in the new image
         run: |
           IMAGE=518285921450.dkr.ecr.eu-central-1.amazonaws.com/learningsteps-api:${{ github.sha }}
-          kubectl set image deployment/learningsteps-api learningsteps-api api=$IMAGE
+          kubectl set image deployment/learningsteps-api api=$IMAGE
         # hint 2: the same commit ID that push-to-ecr used as the tag
         # hint 3: the Deployment's name (metadata: name: in deployment.yaml)
         # hint 4: the CONTAINER's name inside it (the line "- name: ..." under containers:)
