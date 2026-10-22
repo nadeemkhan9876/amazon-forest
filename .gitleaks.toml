@@ -1,0 +1,9 @@
+# Keep all default gitleaks rules
+[extend]
+useDefault = true
+
+# Image tags are commit IDs (public labels), not secrets.
+[allowlist]
+description = "Container image tag = git commit ID"
+regexTarget = "line"
+regexes = ['''learningsteps-api:[0-9a-f]{40}''']
