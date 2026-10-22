@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: api
-          image: 518285921450.dkr.ecr.eu-central-1.amazonaws.com/learningsteps-api:v1   # hint: the tag you pushed
+          image: 518285921450.dkr.ecr.eu-central-1.amazonaws.com/learningsteps-api:128993c9827a768e70ed065a7b15a672a1aaffd8   # hint: the tag you pushed
           ports:
             - containerPort: 8000
           envFrom:

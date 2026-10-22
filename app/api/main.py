@@ -16,7 +16,7 @@ logging.basicConfig(
 logger = logging.getLogger("journal")
 logger.info("LearningSteps API started (env=%s, log level=%s)", os.getenv("APP_ENV", "unknown"), LOG_LEVEL)
 
-app = FastAPI(title="LearningSteps API", description="A simple learning journal API for tracking daily work, struggles, and intentions")
+app = FastAPI(title="LearningSteps API- deployed by pipeline", description="A simple learning journal API for tracking daily work, struggles, and intentions")
 app.include_router(journal_router)
 
 
